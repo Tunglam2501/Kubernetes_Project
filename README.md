@@ -7,7 +7,19 @@ A **Defense-in-Depth** security architecture for automated application deploymen
 - **Falco** — Real-time runtime threat detection
 
 ---
-
+## DIRECTORY
+📦 K8s-DevSecOps-Project
+ ┣ 📂 docs
+ ┃ ┗ 📜 security-report.md    
+ ┣ 📂 images
+ ┃ ┣ 🖼️ trivy-scan.png        
+ ┃ ┣ 🖼️ calico-ping-fail.png
+ ┃ ┗ 🖼️ falco-alert.png
+ ┣ 📂 manifests
+ ┃ ┗ 📜 block-all.yaml
+ ┣ 📂 scripts
+ ┃ ┗ 📜 deploy-pipeline.sh
+ ┗ 📜 README.md               
 ## 1. Architecture Overview
 
 The pipeline ensures no application can be deployed or communicate within the cluster without passing through all security gates:
@@ -43,15 +55,18 @@ The pipeline ensures no application can be deployed or communicate within the cl
 
 The deployment process is managed via an interactive shell script (`deploy-pipeline.sh`) that mimics a CI/CD engine.
 
-### Pipeline Flow
-[Input Image] ──> [Stage 1: Trivy Scan] ──> FAIL ──> [Block Deployment]
-│
-PASS
-▼
-[Stage 2: kubectl apply] ──> Label tier (web/backend/db)
-│
-▼
-[Stage 3: Calico Policy] ──> Generate dynamic YAML ──> Done
+### Stage 1 — Trivy Scan
+- Quét image để phát hiện lỗ hổng bảo mật
+- **FAIL** → chặn deployment ngay lập tức
+- **PASS** → chuyển sang Stage 2
+
+### Stage 2 — kubectl apply
+- Triển khai workload lên cluster
+- Gán nhãn `tier` cho từng loại: `web`, `backend`, `db`
+
+### Stage 3 — Calico Policy
+- Tự động sinh YAML network policy dựa trên label `tier`
+- Apply policy → hoàn tất
 ### Usage
 
 ```bash
