@@ -1,4 +1,4 @@
-# 3-Layer DevSecOps Security Pipeline for Kubernetes (K3s)
+# 3-Layer Security Pipeline for Kubernetes (K3s)
 
 A **Defense-in-Depth** security architecture for automated application deployment on a lightweight Kubernetes (K3s) cluster, coordinating three industry-standard tools across different lifecycle stages:
 
